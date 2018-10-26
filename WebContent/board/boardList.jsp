@@ -10,7 +10,8 @@
 	String board = (String)request.getAttribute("board");
 	List<BoardDTO> ar = (List<BoardDTO>)request.getAttribute("list");
 	Pager pager = (Pager)request.getAttribute("pager");
-	
+	System.out.println(pager.getStartNum());
+	System.out.println(pager.getLastNum());
 %>
 <!DOCTYPE html>
 <html>
@@ -64,7 +65,7 @@
 						<%
 							for (int i = pager.getStartNum(); i <= pager.getLastNum(); i++) {
 						%>
-						<li><a href="./noticeList.jsp?curPage=<%=i%>"></a></li>
+						<li><a href="./noticeList.jsp?curPage=<%=i%>"><%=i%></a></li>
 						<%
 							}
 						%>
@@ -78,7 +79,7 @@
 							}
 						%>
 						<li><a
-							href="./noticeList.jsp?curPage=<%=pager.getTotalPage()%>&"><span
+							href="./noticeList.jsp?curPage=<%=pager.getTotalPage()%>"><span
 								class="glyphicon glyphicon-forward"></span></a></li>
 					</ul>
 				</div>

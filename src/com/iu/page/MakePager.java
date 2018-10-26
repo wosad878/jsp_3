@@ -51,6 +51,7 @@ public class MakePager {
 		if(curBlock == totalBlock) {
 			lastNum = totalPage;
 		}
+	
 		Pager pager = new Pager();
 		pager.setCurBlock(curBlock);
 		pager.setTotalBlock(totalBlock);

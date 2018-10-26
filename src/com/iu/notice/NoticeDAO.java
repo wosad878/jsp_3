@@ -28,7 +28,7 @@ public class NoticeDAO implements BoardDAO{
 		
 		st.setString(1, "%"+rowNumber.getSearch().getSearch()+"%");
 		st.setInt(2, rowNumber.getStartRow());
-		st.setInt(3, rowNumber.getStartRow());
+		st.setInt(3, rowNumber.getLastRow());
 		
 		ResultSet rs = st.executeQuery();
 		List<BoardDTO> ar = new ArrayList<>();
