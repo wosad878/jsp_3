@@ -6,31 +6,32 @@
 <%@page import="com.iu.notice.NoticeDAO"%>
 <%@page import="com.iu.board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("utf-8");
 	response.setCharacterEncoding("utf-8");
 	int curPage = 1;
-	try{
+	try {
 		curPage = Integer.parseInt(request.getParameter("curPage"));
-	}catch(Exception e){
-		
+	} catch (Exception e) {
+
 	}
 	String kind = request.getParameter("kind");
-	if(kind == null || kind.equals("")){
+	if (kind == null || kind.equals("")) {
 		kind = "Title";
 	}
 	String search = request.getParameter("search");
-	if(search == null){
+	if (search == null) {
 		search = "";
 	}
 	BoardDAO boardDAO = new NoticeDAO();
 	MakePager mk = new MakePager(curPage, search, kind);
-	List<BoardDTO> ar =  boardDAO.selecList(mk.makeRow());
+	List<BoardDTO> ar = boardDAO.selecList(mk.makeRow());
 	int totalCount = boardDAO.getCount(kind, search);
 	//page
 	Pager pager = mk.MakePage(totalCount);
 	
+
 %>
 <!DOCTYPE html>
 <html>
@@ -46,6 +47,19 @@
 			<h1>Notice</h1>
 		</div>
 		<div class="row">
+			<div>
+				<form class="form-inline" action="./noticeList.jsp">
+					<div class="form-group">
+						<select class="form-control" id="sel1" name="kind">
+							<option>Title</option>
+							<option>Contents</option>
+							<option>Writer</option>
+						</select> <input type="text" class="form-control" id="search"
+							placeholder="Enter search" name="search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div>
 			<table class="table table-hover">
 				<tr>
 					<td>NUM</td>
@@ -54,13 +68,15 @@
 					<td>DATE</td>
 					<td>HIT</td>
 				</tr>
-				<%for(BoardDTO boardDTO:ar){ %>
+				<%
+					for (BoardDTO boardDTO : ar) {
+				%>
 				<tr>
-					<td><%=boardDTO.getNum() %></td>
-					<td><%=boardDTO.getTitle() %></td>
-					<td><%=boardDTO.getWriter() %></td>
-					<td><%=boardDTO.getReg_date() %></td>
-					<td><%=boardDTO.getHit() %></td>
+					<td><%=boardDTO.getNum()%></td>
+					<td><a href="./noticeSelectOne.jsp?num=<%=boardDTO.getNum()%>"><%=boardDTO.getTitle()%></a></td>
+					<td><%=boardDTO.getWriter()%></td>
+					<td><%=boardDTO.getReg_date()%></td>
+					<td><%=boardDTO.getHit()%></td>
 				</tr>
 				<%
 					}
@@ -104,6 +120,13 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-1">
+				<a href="./noticeWriteForm.jsp" id="btn" class="btn btn-primary">Write</a>
+			</div>
 		</div>
 	</div>
 	<jsp:include page="../temp/footer.jsp"></jsp:include>
