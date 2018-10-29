@@ -27,7 +27,8 @@
 	BoardDAO boardDAO = new NoticeDAO();
 	MakePager mk = new MakePager(curPage, search, kind);
 	List<BoardDTO> ar = boardDAO.selecList(mk.makeRow());
-	int totalCount = boardDAO.getCount(kind, search);
+	RowNumber rowNumber = new RowNumber();
+	int totalCount = boardDAO.getCount(rowNumber.getSearch());
 	//page
 	Pager pager = mk.MakePage(totalCount);
 	
