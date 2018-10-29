@@ -1,5 +1,7 @@
 package com.iu.qna;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import com.iu.board.BoardDAO;
@@ -7,6 +9,8 @@ import com.iu.board.BoardDTO;
 import com.iu.board.BoardReply;
 import com.iu.board.BoardReplyDTO;
 import com.iu.page.RowNumber;
+import com.iu.page.Search;
+import com.iu.util.DBConnector;
 
 public class QnaDAO implements BoardDAO, BoardReply {
 
@@ -24,7 +28,19 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public List<BoardDTO> selecList(RowNumber rowNumber) throws Exception {
-		// TODO Auto-generated method stub
+		Connection con = DBConnector.getConnect();
+		String sql = "select * from "
+				+ "(select rownum r, q.* from "
+				+ "(select num, title, writer, reg_date, hit from qna "
+				+ "where "+rowNumber.getSearch().getKind()+" like ? "
+				+ "order by num desc) q) "
+				+ "where r between? and ?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+rowNumber.getSearch().getSearch()+"%");
+		st.setInt(2, rowNumber.getStartRow());
+		st.setInt(3, rowNumber.getLastRow());
+		
+				
 		return null;
 	}
 
@@ -53,7 +69,7 @@ public class QnaDAO implements BoardDAO, BoardReply {
 	}
 
 	@Override
-	public int getCount(String kind, String search) throws Exception {
+	public int getCount(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
