@@ -1,5 +1,12 @@
+<%@page import="java.util.List"%>
+<%@page import="com.iu.page.Pager"%>
+<%@page import="com.iu.board.BoardDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	List<BoardDTO> ar = (List<BoardDTO>)request.getAttribute("list");
+	Pager pager = (Pager)request.getAttribute("pager");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +18,7 @@
 	<jsp:include page="../../temp/header.jsp"></jsp:include>
 	<div class="container-fluid">
 		<div class="row">
-			<h1>Notice</h1>
+			<h1>QNA</h1>
 		</div>
 		<div class="row">
 			<div>
