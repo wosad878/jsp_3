@@ -18,14 +18,26 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public int reply(BoardReplyDTO boardReplyDTO) throws Exception {
-		// TODO Auto-generated method stub
+		Connection con = DBConnector.getConnect();
+		String sql = "insert into qna values(qna_seq.nextval,?,?,?,sysdate,0,?,?,?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, boardReplyDTO.getTitle());
+		st.setString(2, boardReplyDTO.getWriter());
+		st.setString(3, boardReplyDTO.getContents());
+		
 		return 0;
 	}
 
 	@Override
 	public int replyUpdate(BoardReplyDTO boardReplyDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "update qna set step=step+1 where ref=? and step>?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, boardReplyDTO.getRef());
+		st.setInt(2, boardReplyDTO.getStep());
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
 	}
 
 	@Override
