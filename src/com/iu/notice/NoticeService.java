@@ -14,8 +14,13 @@ import com.iu.page.MakePager;
 import com.iu.page.Pager;
 import com.iu.page.RowNumber;
 
-public class NoticeService implements BoardService {
-
+public class NoticeService implements BoardService{
+	private NoticeDAO noticeDAO;
+	
+	public NoticeService() {
+		noticeDAO = new NoticeDAO();
+	}
+	
 	@Override
 	public ActionFoward insert(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
@@ -34,30 +39,26 @@ public class NoticeService implements BoardService {
 		return null;
 	}
 
-	private NoticeDAO noticeDAO;
-	
-	public NoticeService() {
-		noticeDAO = new NoticeDAO();
-	}
 	
 	//selectList
-	
 	public ActionFoward selectList(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
-		int curPage = 1;
+		int curPage=1;
 		try {
 			curPage = Integer.parseInt(request.getParameter("curPage"));
-		} catch (Exception e) {
+		}catch (Exception e) {
 			// TODO: handle exception
 		}
 		String kind = request.getParameter("kind");
 		String search = request.getParameter("search");
+		
 		MakePager mk = new MakePager(curPage, search, kind);
 		RowNumber rowNumber = mk.makeRow();
+		
 		try {
-			List<BoardDTO> ar = noticeDAO.selecList(rowNumber);
+			List<BoardDTO> ar = noticeDAO.selectList(rowNumber);
 			int totalCount = noticeDAO.getCount(rowNumber.getSearch());
-			Pager pager = mk.MakePage(totalCount);
+			Pager pager = mk.makePage(totalCount);
 			request.setAttribute("list", ar);
 			request.setAttribute("pager", pager);
 			request.setAttribute("board", "notice");
@@ -68,15 +69,17 @@ public class NoticeService implements BoardService {
 			actionFoward.setPath("../WEB-INF/common/result.jsp");
 			e.printStackTrace();
 		}
+		
 		actionFoward.setCheck(true);
+		
 		return actionFoward;
 	}
 	
 	//selectOne
-	
 	public ActionFoward selectOne(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
-		BoardDTO boardDTO = null;
+		BoardDTO boardDTO=null;
+		
 		try {
 			int num = Integer.parseInt(request.getParameter("num"));
 			boardDTO = noticeDAO.selectOne(num);
@@ -95,10 +98,14 @@ public class NoticeService implements BoardService {
 			actionFoward.setPath("./noticeList.do");
 			e.printStackTrace();
 		}
+		
 		if(boardDTO == null) {
 			actionFoward.setCheck(false);
 			actionFoward.setPath("./noticeList.do");
 		}
+		
 		return actionFoward;
 	}
+	
+
 }

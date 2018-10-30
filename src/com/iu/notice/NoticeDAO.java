@@ -11,12 +11,12 @@ import com.iu.board.BoardDTO;
 import com.iu.page.RowNumber;
 import com.iu.page.Search;
 import com.iu.util.DBConnector;
-import com.sun.rowset.internal.Row;
+import com.oreilly.servlet.MultipartRequest;
 
 public class NoticeDAO implements BoardDAO{
 
 	@Override
-	public List<BoardDTO> selecList(RowNumber rowNumber) throws Exception {
+	public List<BoardDTO> selectList(RowNumber rowNumber) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql="select * from "
 				+ "(select rownum R, N.* from "
@@ -69,10 +69,10 @@ public class NoticeDAO implements BoardDAO{
 		return noticeDTO;
 	}
 
-	//seq 가져오기
-	public int getNum() throws Exception{
+	//seq 
+	public int getNum() throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select notice_seq.nextval from dual";
+		String sql="select notice_seq.nextval from dual";
 		PreparedStatement st = con.prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
 		rs.next();
@@ -100,7 +100,8 @@ public class NoticeDAO implements BoardDAO{
 
 	@Override
 	public int update(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
+		
+		
 		return 0;
 	}
 
@@ -113,15 +114,20 @@ public class NoticeDAO implements BoardDAO{
 	@Override
 	public int getCount(Search search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select count(num) from notice "
-				+ "where "+search.getKind()+ " like?";
+		String sql="select count(num) from notice "
+				+ "where "+search.getKind()+" like ?";
+		
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+search.getSearch() +"%");
+		st.setString(1, "%"+search.getSearch()+"%");
+		
 		ResultSet rs = st.executeQuery();
 		rs.next();
-		int result = rs.getInt(1);
+		int result=rs.getInt(1);
+		
 		DBConnector.disConnect(rs, st, con);
+		
 		return result;
+		
 	}
 
 	

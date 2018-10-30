@@ -1,7 +1,7 @@
 package com.iu.board;
 
 public class BoardReplyDTO extends BoardDTO {
-
+	
 	private int ref;
 	private int step;
 	private int depth;
@@ -25,4 +25,6 @@ public class BoardReplyDTO extends BoardDTO {
 		this.depth = depth;
 	}
 	
+	
+
 }

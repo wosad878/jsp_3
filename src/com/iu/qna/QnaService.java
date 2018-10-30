@@ -13,12 +13,19 @@ import com.iu.page.Pager;
 import com.iu.page.RowNumber;
 
 public class QnaService implements BoardService{
-
+	private QnaDAO qnaDAO;
+	
+	public QnaService() {
+		qnaDAO = new QnaDAO();
+	}
+	
 	@Override
 	public ActionFoward insert(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 	@Override
 	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
@@ -26,39 +33,31 @@ public class QnaService implements BoardService{
 		return null;
 	}
 
+
+
 	@Override
 	public ActionFoward delete(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private QnaDAO qnaDAO;
-	
-	public QnaService() {
-		qnaDAO = new QnaDAO();
-	}
-	
-	public void reply() {
-		
-	}
-	public void replyUpdate() {
-		
-	}
+
+
 	public ActionFoward selectOne(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
 		actionFoward.setCheck(false);
 		actionFoward.setPath("./qnaList.do");
-		BoardDTO boardDTO = null;
+		BoardDTO boardDTO=null;
 		try {
 			int num = Integer.parseInt(request.getParameter("num"));
 			boardDTO = qnaDAO.selectOne(num);
-			// 파일만들기
-			// =========
-			request.setAttribute("dto", boardDTO);
-			actionFoward.setPath("../WEB-INF/qna/qnaSelectOne.jsp");
-			actionFoward.setCheck(true);
-		} catch (Exception e) {
 			
+			request.setAttribute("dto", boardDTO);
+			request.setAttribute("board", "qna");
+			actionFoward.setPath("../WEB-INF/view/board/qnaSelectOne.jsp");
+			actionFoward.setCheck(true);
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 		if(boardDTO == null) {
 			actionFoward.setCheck(false);
@@ -68,32 +67,36 @@ public class QnaService implements BoardService{
 		return actionFoward;
 	}
 	
+	//list
 	public ActionFoward selectList(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
-		int curPage = 1;
+		int curPage=1;
 		try {
 			curPage = Integer.parseInt(request.getParameter("curPage"));
-		} catch (Exception e) {
-			// TODO: handle exception
+		}catch (Exception e) {
+			
 		}
 		String kind = request.getParameter("kind");
 		String search = request.getParameter("search");
+		
 		MakePager mk = new MakePager(curPage, search, kind);
 		RowNumber rowNumber = mk.makeRow();
+		List<BoardDTO> ar;
 		try {
-			List<BoardDTO> ar = qnaDAO.selecList(rowNumber);
+			ar = qnaDAO.selectList(rowNumber);
 			int totalCount = qnaDAO.getCount(rowNumber.getSearch());
-			Pager pager = mk.MakePage(totalCount);
+			Pager pager = mk.makePage(totalCount);
 			request.setAttribute("list", ar);
 			request.setAttribute("pager", pager);
 			request.setAttribute("board", "qna");
 			actionFoward.setPath("../WEB-INF/view/board/boardList.jsp");
 		} catch (Exception e) {
-			request.setAttribute("message", "Fail");
-			request.setAttribute("path","../index.jsp");
-			actionFoward.setPath("../WEB-INF/common/result.jsp");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		actionFoward.setCheck(true);
 		return actionFoward;
 	}
+
 }

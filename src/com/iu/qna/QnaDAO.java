@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.iu.board.BoardDAO;
 import com.iu.board.BoardDTO;
 import com.iu.board.BoardReply;
 import com.iu.board.BoardReplyDTO;
+import com.iu.notice.NoticeDTO;
 import com.iu.page.RowNumber;
 import com.iu.page.Search;
 import com.iu.util.DBConnector;
@@ -17,57 +19,45 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public int reply(BoardReplyDTO boardReplyDTO) throws Exception {
-		Connection con = DBConnector.getConnect();
-		String sql = "insert into qna values(qna_seq.nextval,?,?,?,sysdate,0,?,?,?";
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, boardReplyDTO.getTitle());
-		st.setString(2, boardReplyDTO.getWriter());
-		st.setString(3, boardReplyDTO.getContents());
-		st.setInt(4, boardReplyDTO.getRef());
-		st.setInt(5, boardReplyDTO.getStep());
-		st.setInt(6, boardReplyDTO.getDepth());
-		int result = st.executeUpdate();
-		DBConnector.disConnect(st, con);
-		return result;
+		// TODO Auto-generated method stub
+		return 0;
 	}
-
+	
 	@Override
 	public int replyUpdate(BoardReplyDTO boardReplyDTO) throws Exception {
-		Connection con = DBConnector.getConnect();
-		String sql = "update qna set step=step+1 where ref=? and step>?";
-		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, boardReplyDTO.getRef());
-		st.setInt(2, boardReplyDTO.getStep());
-		int result = st.executeUpdate();
-		DBConnector.disConnect(st, con);
-		return result;
+		// TODO Auto-generated method stub
+		return 0;
 	}
-
+	
+	
 	@Override
-	public List<BoardDTO> selecList(RowNumber rowNumber) throws Exception {
-		BoardDTO boardDTO = null;
-		List<BoardDTO> ar = new ArrayList<>();
+	public List<BoardDTO> selectList(RowNumber rowNumber) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select * from "
-				+ "(select rownum r, q.* from "
-				+ "(select num, title, writer, contents, reg_date, hit from qna "
+		String sql="select * from "
+				+ "(select rownum R, N.* from "
+				+ "(select * from qna "
 				+ "where "+rowNumber.getSearch().getKind()+" like ? "
-				+ "order by num desc) q) "
-				+ "where r between? and ?";
+				+ "order by ref desc, step asc) N) "
+				+ "where R between ? and ?";
+		
 		PreparedStatement st = con.prepareStatement(sql);
+		
 		st.setString(1, "%"+rowNumber.getSearch().getSearch()+"%");
 		st.setInt(2, rowNumber.getStartRow());
 		st.setInt(3, rowNumber.getLastRow());
+		
 		ResultSet rs = st.executeQuery();
+		List<BoardDTO> ar = new ArrayList<>();
+		QnaDTO qnaDTO= null;
 		while(rs.next()) {
-			boardDTO = new BoardReplyDTO();
-			boardDTO.setNum(rs.getInt("num"));
-			boardDTO.setTitle(rs.getString("title"));
-			boardDTO.setWriter(rs.getString("writer"));
-			boardDTO.setContents(rs.getString("contents"));
-			boardDTO.setReg_date(rs.getDate("reg_date"));
-			boardDTO.setHit(rs.getInt("hit"));
-			ar.add(boardDTO);
+			qnaDTO = new QnaDTO();
+			qnaDTO.setNum(rs.getInt("num"));
+			qnaDTO.setTitle(rs.getString("title"));
+			qnaDTO.setWriter(rs.getString("writer"));
+			qnaDTO.setReg_date(rs.getDate("reg_date"));
+			qnaDTO.setHit(rs.getInt("hit"));
+			qnaDTO.setDepth(rs.getInt("depth"));
+			ar.add(qnaDTO);
 		}
 		DBConnector.disConnect(rs, st, con);
 		return ar;
@@ -100,14 +90,18 @@ public class QnaDAO implements BoardDAO, BoardReply {
 	@Override
 	public int getCount(Search search) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "select count(num) from qna "
-				+ "where "+search.getKind()+ " like?";
+		String sql="select count(num) from qna "
+				+ "where "+search.getKind()+" like ?";
+		
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setString(1, "%"+search.getSearch() +"%");
+		st.setString(1, "%"+search.getSearch()+"%");
+		
 		ResultSet rs = st.executeQuery();
 		rs.next();
-		int result = rs.getInt(1);
+		int result=rs.getInt(1);
+		
 		DBConnector.disConnect(rs, st, con);
+		
 		return result;
 	}
 

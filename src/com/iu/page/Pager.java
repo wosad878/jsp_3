@@ -1,13 +1,14 @@
 package com.iu.page;
 
 public class Pager {
-
+	
 	private int totalPage;
 	private int totalBlock;
 	private int curBlock;
 	private int startNum;
 	private int lastNum;
 	private Search search;
+	
 	
 	
 	public int getTotalPage() {
@@ -47,4 +48,6 @@ public class Pager {
 		this.search = search;
 	}
 	
+	
+
 }

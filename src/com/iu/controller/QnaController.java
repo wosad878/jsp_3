@@ -18,7 +18,7 @@ import com.iu.qna.QnaService;
 @WebServlet("/QnaController")
 public class QnaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       private QnaService qnaService;
+    private QnaService qnaService;   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -32,21 +32,27 @@ public class QnaController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
 		String command = request.getPathInfo();
+		
 		ActionFoward actionFoward = null;
+		
 		if(command.equals("/qnaList.do")) {
 			actionFoward = qnaService.selectList(request, response);
-		}else if(command.equals("./qnaSelectOne.do")) {
-			actionFoward = qnaService.selectOne(request, response);
+		}else if(command.equals("/qnaSelectOne.do")) {
+			actionFoward= qnaService.selectOne(request, response);
 		}
+		
+		
 		if(actionFoward.isCheck()) {
 			RequestDispatcher view = request.getRequestDispatcher(actionFoward.getPath());
 			view.forward(request, response);
 		}else {
 			response.sendRedirect(actionFoward.getPath());
 		}
+		
 	}
 
 	/**

@@ -31,13 +31,15 @@ public class NoticeController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
-		//	/notice/notice***.do
-		//	/notice***.do
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
+		//  /notice/notice***.do
+		//  /notice***.do
 		String command = request.getPathInfo();
+		
 		//foward, redirect
-		ActionFoward actionFoward = null;
+		ActionFoward actionFoward=null;
 		NoticeService noticeService = new NoticeService();
 		
 		if(command.equals("/noticeList.do")) {
@@ -46,12 +48,15 @@ public class NoticeController extends HttpServlet {
 			actionFoward = noticeService.selectOne(request, response);
 		}
 		
+		
+		
 		if(actionFoward.isCheck()) {
 			RequestDispatcher view = request.getRequestDispatcher(actionFoward.getPath());
 			view.forward(request, response);
 		}else {
 			response.sendRedirect(actionFoward.getPath());
 		}
+		
 	}
 
 	/**

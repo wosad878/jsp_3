@@ -9,12 +9,11 @@ import java.util.List;
 import com.iu.util.DBConnector;
 
 public class FileDAO {
-
+	
 	public List<FileDTO> selectList(FileDTO fileDTO) throws Exception{
 		List<FileDTO> ar = new ArrayList<>();
 		Connection con = DBConnector.getConnect();
-		String sql = "select * from upload "
-				+ "where num=? and kind=?";
+		String sql ="select * from upload where num=? and kind=?";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setInt(1, fileDTO.getNum());
 		st.setString(2, fileDTO.getKind());
@@ -32,9 +31,10 @@ public class FileDAO {
 		return ar;
 	}
 	
-	public int insert(FileDTO fileDTO) throws Exception{
+	public int insert(FileDTO fileDTO) throws Exception {
 		Connection con = DBConnector.getConnect();
-		String sql = "insert into upload values(file_seq.nextval,?,?,?,?)";
+		
+		String sql ="insert into upload values(file_seq.nextval, ?,?,?,?)";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, fileDTO.getFname());
 		st.setString(2, fileDTO.getOname());
@@ -44,4 +44,13 @@ public class FileDAO {
 		DBConnector.disConnect(st, con);
 		return result;
 	}
+
 }
+
+
+
+
+
+
+
+

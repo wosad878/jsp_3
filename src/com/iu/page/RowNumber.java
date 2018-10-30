@@ -1,10 +1,11 @@
 package com.iu.page;
 
 public class RowNumber {
-
+	
 	private int startRow;
 	private int lastRow;
 	private Search search;
+	
 	
 	public int getStartRow() {
 		return startRow;
@@ -24,4 +25,7 @@ public class RowNumber {
 	public void setSearch(Search search) {
 		this.search = search;
 	}
+	
+	
+
 }

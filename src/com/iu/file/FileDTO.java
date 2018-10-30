@@ -1,12 +1,14 @@
 package com.iu.file;
 
 public class FileDTO {
-
+	
 	private int fnum;
 	private String fname;
 	private String oname;
 	private int num;
 	private String kind;
+	
+	
 	
 	public String getKind() {
 		return kind;
@@ -38,4 +40,7 @@ public class FileDTO {
 	public void setNum(int num) {
 		this.num = num;
 	}
+	
+	
+
 }
