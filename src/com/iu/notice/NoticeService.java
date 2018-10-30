@@ -87,6 +87,7 @@ public class NoticeService implements BoardService {
 			List<FileDTO> ar = fileDAO.selectList(fileDTO);
 			request.setAttribute("dto", boardDTO);
 			request.setAttribute("files", ar);
+			request.setAttribute("board", "notice");
 			actionFoward.setCheck(true);
 			actionFoward.setPath("../WEB-INF/notice/noticeSelectOne.jsp");
 		} catch (Exception e) {
