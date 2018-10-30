@@ -5,6 +5,7 @@
 <%@page import="com.iu.notice.NoticeDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- <%
 	String board = (String)request.getAttribute("board");
 	BoardDTO boardDTO = (BoardDTO)request.getAttribute("dto");
@@ -28,9 +29,9 @@
 			<h1>TITLE : ${dto.title}</h1>
 			<h1>WRITER : ${dto.writer}</h1>
 			<h1>Contents : ${dto.contents}</h1>
-			<%-- <% for(FileDTO file : ar){ %>
-				<h3><a href="../upload/<%= file.getFname()%>"><%=file.getOname() %> </a></h3>
-			<%} %> --%>
+			<c:forEach items="${files}" var="fileDTO">
+				<h3><a href="../upload/${fileDTO.fname}">${fileDTO.oname} </a></h3>
+			</c:forEach>
 		</div>	
 	</div>
 	<div>

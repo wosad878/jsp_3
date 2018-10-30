@@ -88,10 +88,22 @@ public class NoticeService implements BoardService{
 
 	@Override
 	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
-		int num = Integer.parseInt(request.getParameter("num"));
 		ActionFoward actionFoward = new ActionFoward();
-		
-		
+		String method = request.getMethod();
+		System.out.println(method);
+		BoardDTO boardDTO= null;
+		if(method.equals("POST")) {
+			
+		}else {
+			int num = Integer.parseInt(request.getParameter("num"));
+			try {
+				boardDTO = noticeDAO.selectOne(num);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		return null;
 	}
