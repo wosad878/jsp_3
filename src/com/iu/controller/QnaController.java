@@ -18,12 +18,13 @@ import com.iu.qna.QnaService;
 @WebServlet("/QnaController")
 public class QnaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+       private QnaService qnaService;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public QnaController() {
         super();
+        qnaService = new QnaService();
         // TODO Auto-generated constructor stub
     }
 
@@ -35,11 +36,10 @@ public class QnaController extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		String command = request.getPathInfo();
 		ActionFoward actionFoward = null;
-		QnaService qnaService = new QnaService();
 		if(command.equals("/qnaList.do")) {
-		actionFoward = qnaService.selectList(request, response);
+			actionFoward = qnaService.selectList(request, response);
 		}else if(command.equals("./qnaSelectOne.do")) {
-			/*actionFoward = qnaService.*/
+			actionFoward = qnaService.selectOne(request, response);
 		}
 		if(actionFoward.isCheck()) {
 			RequestDispatcher view = request.getRequestDispatcher(actionFoward.getPath());

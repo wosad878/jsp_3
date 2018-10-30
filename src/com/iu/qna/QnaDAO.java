@@ -24,8 +24,12 @@ public class QnaDAO implements BoardDAO, BoardReply {
 		st.setString(1, boardReplyDTO.getTitle());
 		st.setString(2, boardReplyDTO.getWriter());
 		st.setString(3, boardReplyDTO.getContents());
-		
-		return 0;
+		st.setInt(4, boardReplyDTO.getRef());
+		st.setInt(5, boardReplyDTO.getStep());
+		st.setInt(6, boardReplyDTO.getDepth());
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
 	}
 
 	@Override

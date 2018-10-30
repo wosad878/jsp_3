@@ -19,6 +19,36 @@ public class QnaService {
 		qnaDAO = new QnaDAO();
 	}
 	
+	public void reply() {
+		
+	}
+	public void replyUpdate() {
+		
+	}
+	public ActionFoward selectOne(HttpServletRequest request, HttpServletResponse response) {
+		ActionFoward actionFoward = new ActionFoward();
+		actionFoward.setCheck(false);
+		actionFoward.setPath("./qnaList.do");
+		BoardDTO boardDTO = null;
+		try {
+			int num = Integer.parseInt(request.getParameter("num"));
+			boardDTO = qnaDAO.selectOne(num);
+			// 파일만들기
+			// =========
+			request.setAttribute("dto", boardDTO);
+			actionFoward.setPath("../WEB-INF/qna/qnaSelectOne.jsp");
+			actionFoward.setCheck(true);
+		} catch (Exception e) {
+			
+		}
+		if(boardDTO == null) {
+			actionFoward.setCheck(false);
+			actionFoward.setPath("./qnaList.do");
+		}
+		
+		return actionFoward;
+	}
+	
 	public ActionFoward selectList(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
 		int curPage = 1;
