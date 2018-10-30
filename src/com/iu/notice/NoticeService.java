@@ -1,5 +1,8 @@
 package com.iu.notice;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,8 @@ import com.iu.file.FileDTO;
 import com.iu.page.MakePager;
 import com.iu.page.Pager;
 import com.iu.page.RowNumber;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 public class NoticeService implements BoardService{
 	private NoticeDAO noticeDAO;
@@ -23,8 +28,62 @@ public class NoticeService implements BoardService{
 	
 	@Override
 	public ActionFoward insert(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		return null;
+		ActionFoward actionFoward = new ActionFoward();
+		String method = request.getMethod();
+		if(method.equals("POST")) {
+			String message = "Fail";
+			String path = "./noticeList.do";
+			//파일 크기 byte
+			int maxSize = 1024* 1024* 100;
+			//파일 저장공간
+			String save = request.getServletContext().getRealPath("upload");
+			System.out.println(save);
+			File file = new File(save);
+			if(!file.exists()) {
+				file.mkdirs();	//파일 저장공간 만들기
+			}
+			try {
+				//하나로 만들기 
+				MultipartRequest multi = new MultipartRequest(request, save, maxSize, "utf-8", new DefaultFileRenamePolicy());
+				NoticeDTO noticeDTO = new NoticeDTO();
+				noticeDTO.setTitle(multi.getParameter("title"));
+				noticeDTO.setWriter(multi.getParameter("writer"));
+				noticeDTO.setContents(multi.getParameter("contents"));
+				noticeDTO.setNum(noticeDAO.getNum());
+				int result = noticeDAO.insert(noticeDTO);
+				if(result > 0) {
+					FileDAO fileDAO = new FileDAO();
+					//파일의 파라미터명을 모은 것들
+					Enumeration<Object> e = multi.getFileNames();
+					while(e.hasMoreElements()) {
+						String p = (String)e.nextElement();
+						FileDTO fileDTO = new FileDTO();
+						fileDTO.setKind("N");
+						fileDTO.setNum(noticeDTO.getNum());
+						fileDTO.setFname(multi.getFilesystemName(p));
+						fileDTO.setOname(multi.getOriginalFileName(p));
+						fileDAO.insert(fileDTO);
+					}
+					message = "Success";
+					actionFoward.setCheck(true);
+					actionFoward.setPath("../WEB-INF/view/common/result.jsp");
+				}else {
+					actionFoward.setCheck(true);
+					actionFoward.setPath("../WEB-INF/view/common/result.jsp");
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			request.setAttribute("message", message);
+			request.setAttribute("path", path);
+			
+		}else {
+			request.setAttribute("board", "notice");
+			actionFoward.setCheck(true);
+			actionFoward.setPath("../WEB-INF/view/board/boardWrite.jsp");
+		}
+		return actionFoward;
 	}
 
 	@Override
@@ -92,7 +151,7 @@ public class NoticeService implements BoardService{
 			request.setAttribute("files", ar);
 			request.setAttribute("board", "notice");
 			actionFoward.setCheck(true);
-			actionFoward.setPath("../WEB-INF/notice/noticeSelectOne.jsp");
+			actionFoward.setPath("../WEB-INF/view/board/boardSelectOne.jsp");
 		} catch (Exception e) {
 			actionFoward.setCheck(false);
 			actionFoward.setPath("./noticeList.do");

@@ -54,7 +54,7 @@ public class QnaService implements BoardService{
 			
 			request.setAttribute("dto", boardDTO);
 			request.setAttribute("board", "qna");
-			actionFoward.setPath("../WEB-INF/view/board/qnaSelectOne.jsp");
+			actionFoward.setPath("../WEB-INF/view/board/boardSelectOne.jsp");
 			actionFoward.setCheck(true);
 		}catch (Exception e) {
 			// TODO: handle exception

@@ -65,8 +65,24 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public BoardDTO selectOne(int num) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = DBConnector.getConnect();
+		String sql = "select * from qna where num=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, num);
+		QnaDTO noticeDTO=null;
+		ResultSet rs = st.executeQuery();
+		
+		if(rs.next()) {
+			noticeDTO = new QnaDTO();
+			noticeDTO.setNum(rs.getInt("num"));
+			noticeDTO.setTitle(rs.getString("title"));
+			noticeDTO.setContents(rs.getString("contents"));
+			noticeDTO.setWriter(rs.getString("writer"));
+			noticeDTO.setReg_date(rs.getDate("reg_date"));
+			noticeDTO.setHit(rs.getInt("hit"));
+		}
+		DBConnector.disConnect(rs, st, con);
+		return noticeDTO;
 	}
 
 	@Override
