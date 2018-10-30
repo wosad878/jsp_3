@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.iu.board.BoardDAO;
 import com.iu.board.BoardDTO;
 import com.iu.board.BoardReply;
