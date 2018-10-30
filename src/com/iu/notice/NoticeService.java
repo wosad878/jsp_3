@@ -7,13 +7,32 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.iu.action.ActionFoward;
 import com.iu.board.BoardDTO;
+import com.iu.board.BoardService;
 import com.iu.file.FileDAO;
 import com.iu.file.FileDTO;
 import com.iu.page.MakePager;
 import com.iu.page.Pager;
 import com.iu.page.RowNumber;
 
-public class NoticeService {
+public class NoticeService implements BoardService {
+
+	@Override
+	public ActionFoward insert(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFoward delete(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	private NoticeDAO noticeDAO;
 	
@@ -41,7 +60,8 @@ public class NoticeService {
 			Pager pager = mk.MakePage(totalCount);
 			request.setAttribute("list", ar);
 			request.setAttribute("pager", pager);
-			actionFoward.setPath("../WEB-INF/notice/noticeList.jsp");
+			request.setAttribute("board", "notice");
+			actionFoward.setPath("../WEB-INF/view/board/boardList.jsp");
 		} catch (Exception e) {
 			request.setAttribute("message", "Fail");
 			request.setAttribute("path", "../index.jsp");
