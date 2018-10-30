@@ -17,6 +17,17 @@ import com.iu.util.DBConnector;
 
 public class QnaDAO implements BoardDAO, BoardReply {
 
+	public int getNum() throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql="select qna_seq.nextval from dual";
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		int num = rs.getInt(1);
+		DBConnector.disConnect(rs, st, con);
+		return num;
+	}
+	
 	@Override
 	public int reply(BoardReplyDTO boardReplyDTO) throws Exception {
 		// TODO Auto-generated method stub
@@ -87,8 +98,18 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "insert into qna values(?,?,?,?,sysdate,0,1,0,0)";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, boardDTO.getNum());
+		st.setString(2, boardDTO.getTitle());
+		st.setString(3, boardDTO.getWriter());
+		st.setString(4, boardDTO.getContents());
+		
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		
+		return result;
 	}
 
 	@Override
@@ -99,8 +120,13 @@ public class QnaDAO implements BoardDAO, BoardReply {
 
 	@Override
 	public int delete(int num) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "delete qna where num =?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, num);
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
 	}
 
 	@Override

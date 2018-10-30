@@ -48,6 +48,10 @@ public class NoticeController extends HttpServlet {
 			actionFoward = noticeService.selectOne(request, response);
 		}else if(command.equals("/noticeWrite.do")) {
 			actionFoward = noticeService.insert(request, response);
+		}else if(command.equals("/noticeDelete.do")) {
+			actionFoward = noticeService.delete(request, response);
+		}else if(command.equals("/noticeUpdate.do")) {
+			actionFoward = noticeService.update(request, response);
 		}
 		
 		

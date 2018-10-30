@@ -88,14 +88,35 @@ public class NoticeService implements BoardService{
 
 	@Override
 	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+		int num = Integer.parseInt(request.getParameter("num"));
+		ActionFoward actionFoward = new ActionFoward();
+		
+		
+		
 		return null;
 	}
 
 	@Override
 	public ActionFoward delete(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		return null;
+		String message = "Fail";
+		String path = "./noticeList.do";
+		int num = Integer.parseInt(request.getParameter("num"));
+		ActionFoward actionFoward = new ActionFoward();
+		
+		try {
+			int result = noticeDAO.delete(num);
+			if(result > 0) {
+				message = "Success";
+				actionFoward.setCheck(true);
+				actionFoward.setPath("../WEB-INF/view/common/result.jsp");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		request.setAttribute("message", message);
+		request.setAttribute("path", path);
+		return actionFoward;
 	}
 
 	
