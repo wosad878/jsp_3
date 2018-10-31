@@ -160,11 +160,12 @@ public class NoticeService implements BoardService{
 	public ActionFoward delete(HttpServletRequest request, HttpServletResponse response) {
 		String message = "Fail";
 		String path = "./noticeList.do";
-		int num = Integer.parseInt(request.getParameter("num"));
 		ActionFoward actionFoward = new ActionFoward();
-		
 		try {
-			int result = noticeDAO.delete(num);
+		int num = Integer.parseInt(request.getParameter("num"));
+		FileDAO fileDAO = new FileDAO();
+		fileDAO.deleteAll(num);
+		int result = noticeDAO.delete(num);
 			if(result > 0) {
 				message = "Success";
 				actionFoward.setCheck(true);
