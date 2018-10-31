@@ -13,6 +13,8 @@ import com.iu.page.Search;
 import com.iu.util.DBConnector;
 import com.oreilly.servlet.MultipartRequest;
 
+import oracle.jdbc.proxy.annotation.Pre;
+
 public class NoticeDAO implements BoardDAO{
 
 	@Override
@@ -100,9 +102,15 @@ public class NoticeDAO implements BoardDAO{
 
 	@Override
 	public int update(BoardDTO boardDTO) throws Exception {
-		
-		
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "update notice set title=?, contents=? where num=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, boardDTO.getTitle());
+		st.setString(2, boardDTO.getContents());
+		st.setInt(3, boardDTO.getNum());
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
 	}
 
 	@Override

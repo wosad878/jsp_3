@@ -1,13 +1,10 @@
 package com.iu.notice;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.iu.action.ActionFoward;
 import com.iu.board.BoardDTO;
 import com.iu.board.BoardService;
@@ -90,14 +87,65 @@ public class NoticeService implements BoardService{
 	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
 		String method = request.getMethod();
-		System.out.println(method);
 		BoardDTO boardDTO= null;
 		if(method.equals("POST")) {
-			
-		}else {
-			int num = Integer.parseInt(request.getParameter("num"));
+			//DB Update
+			int max = 1024* 1024 * 100;
+			String path = request.getServletContext().getRealPath("upload");
+			File file = new File(path);			
+			if(!file.exists()) {
+				file.mkdirs();
+			}
 			try {
+				MultipartRequest multi = new MultipartRequest(request, path, max, "utf-8", new DefaultFileRenamePolicy());
+				NoticeDTO noticeDTO = new NoticeDTO();
+				noticeDTO.setNum(Integer.parseInt(multi.getParameter("num")));
+				noticeDTO.setTitle(multi.getParameter("title"));
+				noticeDTO.setContents(multi.getParameter("contents"));
+				
+				//update
+				int result = noticeDAO.update(noticeDTO);
+				if(result > 0) {
+					Enumeration<Object> e = multi.getFileNames();
+					FileDAO fileDAO = new FileDAO();
+					while(e.hasMoreElements()) {
+						FileDTO fileDTO = new FileDTO();
+						String key = (String)e.nextElement();
+						fileDTO.setOname(multi.getOriginalFileName(key));
+						fileDTO.setFname(multi.getFilesystemName(key));
+						fileDTO.setKind("N");
+						fileDTO.setNum(noticeDTO.getNum());
+						fileDAO.insert(fileDTO);
+					}
+					request.setAttribute("message", "Success");
+					request.setAttribute("path", "./noticeList.do");
+				}else {
+					request.setAttribute("message", "Fail");
+					request.setAttribute("path", "./noticeList.do");
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				request.setAttribute("message", "Fail");
+				request.setAttribute("path", "./noticeList.do");
+				e.printStackTrace();
+			}
+			actionFoward.setCheck(true);
+			actionFoward.setPath("../WEB-INF/view/common/result.jsp");
+		}else {
+			try {
+				//Form
+				int num = Integer.parseInt(request.getParameter("num"));
+				FileDAO fileDAO = new FileDAO();
+				FileDTO fileDTO = new FileDTO();
+				fileDTO.setNum(num);
+				fileDTO.setKind("N");
+				List<FileDTO> ar = fileDAO.selectList(fileDTO);
 				boardDTO = noticeDAO.selectOne(num);
+				request.setAttribute("dto", boardDTO);
+				request.setAttribute("files", ar);
+				request.setAttribute("board", "notice");
+				actionFoward.setCheck(true);
+				actionFoward.setPath("../WEB-INF/view/board/boardUpdate.jsp");
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -105,7 +153,7 @@ public class NoticeService implements BoardService{
 			}
 		}
 		
-		return null;
+		return actionFoward;
 	}
 
 	@Override
