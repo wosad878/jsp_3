@@ -38,9 +38,6 @@ public class MemberService {
 					if(memberDTO != null) {
 						message = "로그인 성공";
 						path="./memberSelectOne.do";
-						Cookie cookie = new Cookie("id", memberDTO.getId());
-						cookie.setMaxAge(60*60);
-						response.addCookie(cookie);
 						actionFoward.setCheck(true);
 						actionFoward.setPath("../WEB-INF/view/common/result.jsp");
 					}else {
@@ -82,9 +79,9 @@ public class MemberService {
 				memberDTO.setEmail(multi.getParameter("email"));
 				memberDTO.setKind(multi.getParameter("kind"));
 				memberDTO.setClassmate(multi.getParameter("classmate"));
+				//파일정보를 DTO에 추가
 		
 				int result = memberDAO.join(memberDTO);
-				//파일정보를 DB에 insert
 				
 				if(result > 0) {
 					request.setAttribute("message", "가입성공");

@@ -7,7 +7,8 @@ public class MemberDTO {
 	private String email;
 	private String kind;
 	private String classmate;
-	
+	private String fname;
+	private String oname;
 	public String getId() {
 		return id;
 	}
@@ -43,5 +44,17 @@ public class MemberDTO {
 	}
 	public void setClassmate(String classmate) {
 		this.classmate = classmate;
+	}
+	public String getFname() {
+		return fname;
+	}
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+	public String getOname() {
+		return oname;
+	}
+	public void setOname(String oname) {
+		this.oname = oname;
 	}
 }
