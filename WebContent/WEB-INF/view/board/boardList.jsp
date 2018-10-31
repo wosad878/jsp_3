@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<%@ include file="../../../temp/bootStrap.jsp" %>
+<c:import url="../../../temp/bootStrap.jsp"></c:import>
 </head>
 <body>
 <%-- <jsp:include page="../../../temp/header.jsp"></jsp:include> --%>
@@ -77,23 +77,22 @@
 	  	<li><a href="./${board}List.do?curPage=1"><span class="glyphicon glyphicon-backward"></span></a></li>
 	  	
 	  	<c:if test="${pager.curBlock>1}">
-	  		  	<li><a href="./${board}List.do?curPage=${pager.startNum-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+	  		<li><a href="./${board}List.do?curPage=${pager.startNum-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 	  	</c:if>
+	  	
 	  	<c:forEach begin="${pager.startNum}" end="${pager.lastNum}" var="i">
 	   		<li><a href="./${board}List.do?curPage=${i}">${i}</a></li>
 	  	</c:forEach>
+	  	
 	   	<c:if test="${pager.curBlock < pager.totalBlock}">
-	   	<li><a href="./${board}List.do?curPage=${pager.lastNum+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+	   		<li><a href="./${board}List.do?curPage=${pager.lastNum+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 	   	</c:if>
 	   	
-	   		
 	   	<li><a href="./${board}List.do?curPage=${pager.totalPage}"><span class="glyphicon glyphicon-forward"></span></a></li>
 	  </ul>
 	  
   	</div>
 </div>
-	
-	
 
 </div>
 
@@ -105,7 +104,6 @@
 
 		</div>
 	</div>
-
 
 	<jsp:include page="../../../temp/footer.jsp"></jsp:include>
 </body>

@@ -54,7 +54,7 @@ public class QnaService implements BoardService{
 						String p = (String)e.nextElement();
 						FileDTO fileDTO = new FileDTO();
 						fileDTO.setKind("Q");
-						fileDTO.setNum(qnaDAO.getNum());
+						fileDTO.setNum(qnaDTO.getNum());
 						fileDTO.setFname(multi.getFilesystemName(p));
 						fileDTO.setOname(multi.getOriginalFileName(p));
 						fileDAO.insert(fileDTO);
@@ -115,7 +115,6 @@ public class QnaService implements BoardService{
 	}
 
 
-
 	public ActionFoward selectOne(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
 		actionFoward.setCheck(false);
@@ -124,8 +123,13 @@ public class QnaService implements BoardService{
 		try {
 			int num = Integer.parseInt(request.getParameter("num"));
 			boardDTO = qnaDAO.selectOne(num);
-			
+			FileDTO fileDTO = new FileDTO();
+			FileDAO fileDAO = new FileDAO();
+			fileDTO.setNum(num);
+			fileDTO.setKind("Q");
+			List<FileDTO> ar = fileDAO.selectList(fileDTO);
 			request.setAttribute("dto", boardDTO);
+			request.setAttribute("files", ar);
 			request.setAttribute("board", "qna");
 			actionFoward.setPath("../WEB-INF/view/board/boardSelectOne.jsp");
 			actionFoward.setCheck(true);
