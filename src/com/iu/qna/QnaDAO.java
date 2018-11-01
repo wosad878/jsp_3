@@ -17,6 +17,8 @@ import com.iu.util.DBConnector;
 
 public class QnaDAO implements BoardDAO, BoardReply {
 
+	
+	
 	public int getNum() throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql="select qna_seq.nextval from dual";
@@ -30,13 +32,20 @@ public class QnaDAO implements BoardDAO, BoardReply {
 	
 	@Override
 	public int reply(BoardReplyDTO boardReplyDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "update qna set step= step+1 where ref=? and step>?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, boardReplyDTO.getRef());
+		st.setInt(2, boardReplyDTO.getStep());
+		int result = st.executeUpdate();
+		DBConnector.disConnect(st, con);
+		return result;
 	}
 	
 	@Override
 	public int replyUpdate(BoardReplyDTO boardReplyDTO) throws Exception {
-		// TODO Auto-generated method stub
+		Connection con = DBConnector.getConnect();
+		String sql = "insert into qna values()";
 		return 0;
 	}
 	
@@ -80,20 +89,23 @@ public class QnaDAO implements BoardDAO, BoardReply {
 		String sql = "select * from qna where num=?";
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setInt(1, num);
-		QnaDTO noticeDTO=null;
+		QnaDTO qnaDTO = null;
 		ResultSet rs = st.executeQuery();
 		
 		if(rs.next()) {
-			noticeDTO = new QnaDTO();
-			noticeDTO.setNum(rs.getInt("num"));
-			noticeDTO.setTitle(rs.getString("title"));
-			noticeDTO.setContents(rs.getString("contents"));
-			noticeDTO.setWriter(rs.getString("writer"));
-			noticeDTO.setReg_date(rs.getDate("reg_date"));
-			noticeDTO.setHit(rs.getInt("hit"));
+			qnaDTO = new QnaDTO();
+			qnaDTO.setNum(rs.getInt("num"));
+			qnaDTO.setTitle(rs.getString("title"));
+			qnaDTO.setContents(rs.getString("contents"));
+			qnaDTO.setWriter(rs.getString("writer"));
+			qnaDTO.setReg_date(rs.getDate("reg_date"));
+			qnaDTO.setHit(rs.getInt("hit"));
+			qnaDTO.setRef(rs.getInt("ref"));
+			qnaDTO.setStep(rs.getInt("step"));
+			qnaDTO.setDepth(rs.getInt("depth"));
 		}
 		DBConnector.disConnect(rs, st, con);
-		return noticeDTO;
+		return qnaDTO;
 	}
 
 	@Override

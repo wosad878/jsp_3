@@ -49,6 +49,8 @@ public class QnaController extends HttpServlet {
 			actionFoward = qnaService.delete(request, response);
 		}else if(command.equals("/qnaUpdate.do")) {
 			actionFoward = qnaService.update(request, response);
+		}else if(command.equals("/qnaReply.do")) {
+			actionFoward = qnaService.reply(request, response);
 		}
 		
 		

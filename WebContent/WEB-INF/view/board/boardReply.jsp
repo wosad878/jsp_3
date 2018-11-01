@@ -16,12 +16,11 @@
 <jsp:include page="../../../temp/bootStrap.jsp"></jsp:include>	
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-
 <jsp:include page="../../../temp/header.jsp"></jsp:include>
 
 <div class="container-fluid">
 	<div class="row">
-		 <form action="./${board}Write.do" method="post" enctype="multipart/form-data">
+		 <form action="./qnaReply.do" method="post" enctype="multipart/form-data">
 		    <div class="form-group">
 		      <label for="title">Title:</label>
 		      <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title">
@@ -43,16 +42,10 @@
 		      <label for="file">File:</label>
 		      <input type="file" class="form-control" id="file" name="f2">
 		    </div>
-		    
-		    
 		    <button type="submit" class="btn btn-default">Write</button>
 		  </form>
-	
-		
 	</div>
 </div>
-	
-
 <jsp:include page="../../../temp/footer.jsp"></jsp:include>
 
 </body>

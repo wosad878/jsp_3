@@ -35,12 +35,18 @@
 		</div>	
 	</div>
 	<div>
+	
 		<a href="./${requestScope.board}List.do">List</a>
-		<a href="./${requestScope.board}Update.do?num=${dto.num}">Update</a>
-		<a href="./${requestScope.board}Delete.do?num=${dto.num}">Delete</a>
-		<c:if test="${board ne 'notice'}">
-		<a href="./${board}Reply.do">Reply</a>
+		<c:if test="${member.id == dto.writer}">
+			<a href="./${requestScope.board}Update.do?num=${dto.num}">Update</a>
+			<a href="./${requestScope.board}Delete.do?num=${dto.num}">Delete</a>
 		</c:if>
+		<c:if test="${board ne 'notice'}">
+			<c:if test="${not empty member}">
+				<a href="./${board}Reply.do?num=${dto.num}">Reply</a>
+			</c:if>
+		</c:if>
+		
 	</div>
 	
 <jsp:include page="../../../temp/footer.jsp"></jsp:include>

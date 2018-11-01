@@ -3,9 +3,9 @@ package com.iu.qna;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.iu.action.ActionFoward;
 import com.iu.board.BoardDTO;
@@ -18,11 +18,60 @@ import com.iu.page.RowNumber;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+
 public class QnaService implements BoardService{
 	private QnaDAO qnaDAO;
 	
 	public QnaService() {
 		qnaDAO = new QnaDAO();
+	}
+	
+	public ActionFoward reply(HttpServletRequest request, HttpServletResponse response) {
+		String message = "실패";
+		String method = request.getMethod();
+		ActionFoward actionFoward = new ActionFoward();
+		if(method.equals("POST")) {
+			int max = 1024*1024*10;
+			String path = request.getServletContext().getRealPath("upload");
+			File file = new File(path);
+			if(!file.exists()) {
+				file.mkdirs();
+			}
+			try {
+				MultipartRequest multi = new MultipartRequest(request, path, max, "utf-8", new DefaultFileRenamePolicy());
+				HttpSession session = request.getSession();
+				BoardDTO DTO = (BoardDTO)session.getAttribute("dto");
+				int num = DTO.getNum();
+				System.out.println(num);
+				QnaDTO boardDTO = (QnaDTO)qnaDAO.selectOne(num);
+				qnaDAO.reply(boardDTO);
+				QnaDTO qnaDTO = new QnaDTO();
+				qnaDTO.setNum(qnaDAO.getNum());
+				qnaDTO.setTitle(multi.getParameter("title"));
+				qnaDTO.setWriter(multi.getParameter("writer"));
+				qnaDTO.setContents(multi.getParameter("contents"));
+				qnaDTO.setRef(boardDTO.getRef());
+				qnaDTO.setStep(boardDTO.getRef()+1);
+				qnaDTO.setDepth(boardDTO.getDepth()+1);
+				int result = qnaDAO.replyUpdate(qnaDTO);
+				System.out.println(result);
+				if(result > 0) {
+					message ="성공";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		request.setAttribute("message", message);
+		request.setAttribute("path", "./boardList.do");
+		actionFoward.setCheck(true);
+		actionFoward.setPath("../WEB-INF/view/common/result.jsp");
+		
+		}else {
+			actionFoward.setCheck(true);
+			actionFoward.setPath("../WEB-INF/view/board/boardReply.jsp");
+		}
+		return actionFoward;
 	}
 	
 	@Override
@@ -131,6 +180,8 @@ public class QnaService implements BoardService{
 			request.setAttribute("dto", boardDTO);
 			request.setAttribute("files", ar);
 			request.setAttribute("board", "qna");
+			HttpSession session = request.getSession();
+			session.setAttribute("dto", boardDTO);
 			actionFoward.setPath("../WEB-INF/view/board/boardSelectOne.jsp");
 			actionFoward.setCheck(true);
 		}catch (Exception e) {

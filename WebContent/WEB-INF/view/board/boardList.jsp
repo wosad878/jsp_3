@@ -53,15 +53,40 @@
 			</tr>
 			<c:forEach items="${list}" var="boardDTO">
 				<tr>
-					<td>${boardDTO.num}</td>
-					<td>		
-						<a href="./${board}SelectOne.do?num=${boardDTO.num}">
-						<c:catch>
-							<c:forEach begin="1" end="${boardDTO.depth}">
-								--
-							</c:forEach>
-						</c:catch>
-						${boardDTO.title}</a> </td>
+				<td>${boardDTO.num} </td>
+					<c:if test="${empty member}">
+						<c:if test=" ${board eq 'qna'}">
+							<td>
+								<c:catch>
+									<c:forEach begin="1" end="${boardDTO.depth}">
+										--
+									</c:forEach>
+								</c:catch> ${boardDTO.title}
+							</td>
+						</c:if>
+						<c:if test="${board eq 'notice'}">
+							<td>
+								<a href="./${board}SelectOne.do?num=${boardDTO.num}">
+									<c:catch>
+										<c:forEach begin="1" end="${boardDTO.depth}">
+											--
+										</c:forEach>
+									</c:catch> ${boardDTO.title}
+								</a>
+							</td>
+						</c:if>
+					</c:if>
+					<c:if test="${not empty member}">
+						<td>
+							<a href="./${board}SelectOne.do?num=${boardDTO.num}">
+								<c:catch>
+									<c:forEach begin="1" end="${boardDTO.depth}">
+										--
+									</c:forEach>
+								</c:catch> ${boardDTO.title}
+							</a>
+						</td>
+					</c:if>
 					<td>${boardDTO.writer} </td>
 					<td>${boardDTO.reg_date} </td>
 					<td>${boardDTO.hit}</td>
@@ -98,10 +123,20 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-1">
-				<a href="./${board}Write.do" class="btn btn-primary">Write</a>
-			</div>
-
+		<c:if test="${board == 'notice'}">
+			<c:if test="${member.kind == 'T'}">
+				<div class="col-md-1">
+					<a href="./${board}Write.do" class="btn btn-primary">Write</a>
+				</div>
+			</c:if>
+		</c:if>
+		<c:if test="${board == 'qna'}">
+			<c:if test="${not empty member}">
+				<div class="col-md-1">
+					<a href="./${board}Write.do" class="btn btn-primary">Write</a>
+				</div>
+			</c:if>
+		</c:if>
 		</div>
 	</div>
 
