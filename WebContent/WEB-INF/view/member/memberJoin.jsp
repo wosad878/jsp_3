@@ -11,6 +11,7 @@
 <body>
 <c:import url="../../../temp/header.jsp"/>
 <div class="container-fluid">
+	
 	<div class="row">
 		 <form action="./memberJoin.do" method="post" enctype="multipart/form-data">
 		    <div class="form-group">

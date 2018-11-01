@@ -41,11 +41,20 @@ public class MemberController extends HttpServlet {
 			actionFoward = memberService.memberJoin(request, response);
 		}else if(command.equals("/memberLogin.do")) {
 			actionFoward = memberService.memberLogin(request, response);
-		}else if(command.equals("/memberList.do")) {
+		}else if(command.equals("/memberLogout.do")) {
+			actionFoward = memberService.logout(request, response);
+		}else if(command.equals("/memberMyPage.do")) {
+			actionFoward = memberService.myPage(request, response);
+		}else if(command.equals("/memberDelete.do")) {
+			actionFoward = memberService.delete(request, response);
+		}else if(command.equals("/memberUpdate.do")) {
+			actionFoward = memberService.update(request, response);
+		}else {
 			actionFoward = new ActionFoward();
 			actionFoward.setCheck(true);
 			actionFoward.setPath("../WEB-INF/view/member/memberList.jsp");
 		}
+		
 		
 		if(actionFoward.isCheck()) {
 			RequestDispatcher view = request.getRequestDispatcher(actionFoward.getPath());

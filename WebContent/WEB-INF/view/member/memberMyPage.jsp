@@ -12,20 +12,14 @@
 <c:import url="../../../temp/header.jsp"/>
 	<div class="container-fluid">
 		<div class="row">
-			<!-- 로그인 했을 때 -->
-			<c:choose>
-				<c:when test="${not empty member}">
-					<H3>${member.id}님 환영합니다</H3>
-					<a href="./memberLogout.do">LOGOUT</a>
-					<a href="./memberMyPage.do">MyPage</a>
-				</c:when>
-				<c:otherwise>
-					<!-- 로그인 전 -->
-					<a href="./memberLogin.do">LOGIN</a>
-					<a href="./memberJoin.do">JOIN</a>
-				</c:otherwise>
-			</c:choose>
-			
+			<h1>ID : ${member.id}</h1>
+			<h1>Name :${member.name}</h1>
+			<h1>Email :${member.email}</h1>
+			<img src ="../upload/${member.fname}">
+		</div>
+		<div>
+			<a href="./memberUpdate.do">update</a>
+			<a href="./memberDelete.do">delete</a>
 		</div>
 	</div>
 

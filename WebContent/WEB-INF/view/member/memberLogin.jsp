@@ -11,6 +11,9 @@
 <body>
 <c:import url="../../../temp/header.jsp"/>
 <div class="container-fluid">
+	<div class="row">
+		<h3>${message}</h3>
+	</div>
 		<div class="row">
 			<form action="./memberLogin.do" method="post">
 				<div class="form-group">
