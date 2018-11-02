@@ -14,6 +14,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 <jsp:include page="../../../temp/bootStrap.jsp"></jsp:include>	
+<script src="https://cdn.ckeditor.com/4.10.1/full/ckeditor.js"></script>
+<script type="text/javascript">
+	$(function(){
+		CKEDITOR.replace("contents");
+		
+		$("#btn").click(function(){
+			var title = $("#title").val();
+			if(title != ''){
+				$("#frm").submit();
+			}else{
+				alert("제목");
+			}
+		});
+		var count = 1;
+		var index = 0;
+		$("#addbtn").click(function(){
+			if(count < 6){
+				var r='<div class="form-group" id="f'+index+'">';
+				r = r+'<label for="file">File:</label>';
+				r = r+'<input type="file" class="form-control" id="file" name="f'+count+'">';
+				r = r+'<span class="remove" title="'+index+'">X</span>';
+				r = r+'</div>';
+				$('#file').append(r);
+				count++;
+				index++;
+			}else{
+				alert("5개");
+			}
+			
+		});
+		$("#file").on("click", ".remove", function(){
+			var t = $(this).attr("title");
+			$("#f"+t).remove();
+			count--;
+		});
+	});
+</script>
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
 
@@ -21,7 +58,7 @@
 
 <div class="container-fluid">
 	<div class="row">
-		 <form action="./${board}Write.do" method="post" enctype="multipart/form-data">
+		 <form id="frm" action="./${board}Write.do" method="post" enctype="multipart/form-data">
 		    <div class="form-group">
 		      <label for="title">Title:</label>
 		      <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title">
@@ -35,17 +72,15 @@
 		      <textarea rows="25" cols="" class="form-control" name="contents"></textarea>
 		    </div>
 		    
-		    <div class="form-group">
+		   <!--  <div class="form-group">
 		      <label for="file">File:</label>
 		      <input type="file" class="form-control" id="file" name="f1">
-		    </div>
-		    <div class="form-group">
-		      <label for="file">File:</label>
-		      <input type="file" class="form-control" id="file" name="f2">
-		    </div>
-		    
-		    
-		    <button type="submit" class="btn btn-default">Write</button>
+		    </div> -->
+			<input type="button" value="File add"class="btn btn-default" id="addbtn">		
+			<div class="files" id="file">
+			
+			</div>    
+		    <input type="button" value="write" class="btn btn-default" id="btn">
 		  </form>
 	
 		

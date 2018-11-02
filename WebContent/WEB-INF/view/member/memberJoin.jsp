@@ -7,16 +7,25 @@
 <meta charset="UTF-8">
 <c:import url="../../../temp/bootStrap.jsp"/>
 <title>Insert title here</title>
+<script type="text/javascript">
+	$(function(){
+		$("#btn").click(function(){
+			var id = $("#id").val();
+				window.open("./memberCheckId.do?id="+id, "", "width=300,height=200,top=300,left=700");
+		});
+	});
+</script>
 </head>
 <body>
 <c:import url="../../../temp/header.jsp"/>
 <div class="container-fluid">
 	
 	<div class="row">
-		 <form action="./memberJoin.do" method="post" enctype="multipart/form-data">
+		 <form action="./memberJoin.do" name="frm" method="post" enctype="multipart/form-data">
 		    <div class="form-group">
 		      <label for="id">ID:</label>
 		      <input type="text" class="form-control" id="id" placeholder="Enter ID" name="id">
+		      <input type="button" id="btn" value="중복확인"> 
 		    </div>
 		    <div class="form-group">
 		      <label for="pw">Passwrod:</label>

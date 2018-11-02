@@ -16,6 +16,26 @@ public class MemberService {
 	public MemberService() {
 		memberDAO = new MemberDAO();
 	}
+	public ActionFoward checkId(HttpServletRequest request, HttpServletResponse response) {
+		actionFoward = new ActionFoward();
+		String id = request.getParameter("id");
+		boolean check = true;
+		String result = "1";
+		try {
+			check = memberDAO.check(id);
+				
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(check) {
+			result = "2";
+		}
+		request.setAttribute("result", result);
+		actionFoward.setCheck(true);
+		actionFoward.setPath("../WEB-INF/view/member/memberCheckId.jsp");
+		return actionFoward;
+	}
 	
 	public ActionFoward update(HttpServletRequest request, HttpServletResponse response) {
 		actionFoward = new ActionFoward();

@@ -7,6 +7,18 @@ import com.iu.util.DBConnector;
 
 public class MemberDAO {
 	
+	public boolean check(String id) throws Exception{
+		boolean check = true;
+		Connection con = DBConnector.getConnect();
+		String sql = "select id from member where id=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, id);
+		ResultSet rs = st.executeQuery();
+		check = rs.next();
+		DBConnector.disConnect(rs, st, con);
+		return check;
+	}
+	
 	public int delete(String id) throws Exception{
 		Connection con = DBConnector.getConnect();
 		String sql = "delete member where id=?";

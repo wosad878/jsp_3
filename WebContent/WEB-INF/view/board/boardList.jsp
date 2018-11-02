@@ -54,42 +54,18 @@
 			<c:forEach items="${list}" var="boardDTO">
 				<tr>
 				<td>${boardDTO.num} </td>
-					<c:if test="${empty member}">
-						<c:if test=" ${board eq 'qna'}">
-							<td>
-								<c:catch>
-									<c:forEach begin="1" end="${boardDTO.depth}">
-										--
-									</c:forEach>
-								</c:catch> ${boardDTO.title}
-							</td>
-						</c:if>
-						<c:if test="${board eq 'notice'}">
-							<td>
-								<a href="./${board}SelectOne.do?num=${boardDTO.num}">
-									<c:catch>
-										<c:forEach begin="1" end="${boardDTO.depth}">
-											--
-										</c:forEach>
-									</c:catch> ${boardDTO.title}
-								</a>
-							</td>
-						</c:if>
-					</c:if>
-					<c:if test="${not empty member}">
-						<td>
-							<a href="./${board}SelectOne.do?num=${boardDTO.num}">
-								<c:catch>
-									<c:forEach begin="1" end="${boardDTO.depth}">
-										--
-									</c:forEach>
-								</c:catch> ${boardDTO.title}
-							</a>
-						</td>
-					</c:if>
-					<td>${boardDTO.writer} </td>
-					<td>${boardDTO.reg_date} </td>
-					<td>${boardDTO.hit}</td>
+				<td>
+					<a href="./${board}SelectOne.do?num=${boardDTO.num}">
+						<c:catch>
+							<c:forEach begin="1" end="${boardDTO.depth}">
+								--
+							</c:forEach>
+						</c:catch> ${boardDTO.title}
+					</a>
+				</td>
+				<td>${boardDTO.writer} </td>
+				<td>${boardDTO.reg_date} </td>
+				<td>${boardDTO.hit}</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -121,24 +97,18 @@
 
 </div>
 
-	<div class="container-fluid">
-		<div class="row">
-		<c:if test="${board == 'notice'}">
-			<c:if test="${member.kind == 'T'}">
-				<div class="col-md-1">
-					<a href="./${board}Write.do" class="btn btn-primary">Write</a>
-				</div>
-			</c:if>
+<c:choose>
+	<c:when test="${board eq 'notice'}">
+		<c:if test="${not empty member and member.kind eq 'T'}">
+			<c:import url="../../../temp/writeButton.jsp"/>
 		</c:if>
-		<c:if test="${board == 'qna'}">
-			<c:if test="${not empty member}">
-				<div class="col-md-1">
-					<a href="./${board}Write.do" class="btn btn-primary">Write</a>
-				</div>
-			</c:if>
+	</c:when>
+	<c:otherwise>
+		<c:if test="${not empty member}">
+			<c:import url="../../../temp/writeButton.jsp"/>
 		</c:if>
-		</div>
-	</div>
+	</c:otherwise>
+</c:choose>
 
 	<jsp:include page="../../../temp/footer.jsp"></jsp:include>
 </body>
