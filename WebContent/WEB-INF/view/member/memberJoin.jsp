@@ -10,7 +10,8 @@
 <script type="text/javascript">
 	$(function(){
 		$("#btn").click(function(){
-			var id = $("#id").val();
+			var id = document.frm.id.value;
+			/* var id = $("#id").val(); */
 				window.open("./memberCheckId.do?id="+id, "", "width=300,height=200,top=300,left=700");
 		});
 	});
