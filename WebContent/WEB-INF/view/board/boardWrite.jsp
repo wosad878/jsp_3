@@ -71,12 +71,12 @@
 		      <label for="contents">Contents:</label>
 		      <textarea rows="25" cols="" class="form-control" name="contents"></textarea>
 		    </div>
+			<input type="button" value="File add"class="btn btn-default" id="addbtn">		
 		    
 		   <!--  <div class="form-group">
 		      <label for="file">File:</label>
 		      <input type="file" class="form-control" id="file" name="f1">
 		    </div> -->
-			<input type="button" value="File add"class="btn btn-default" id="addbtn">		
 			<div class="files" id="file">
 			
 			</div>    
