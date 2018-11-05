@@ -9,10 +9,22 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 	$(function(){
+		$("#id").change(function(){
+			$("#idcheck").val('f');
+		});
+		
+		$("#join").click(function(){
+			var check=$("#idcheck").val();
+			if(check == 's'){
+				alert("OK");
+			}else{
+				alert("ID 중복체크");
+			}
+		});
 		$("#btn").click(function(){
 			var id = document.frm.id.value;
 			/* var id = $("#id").val(); */
-				window.open("./memberCheckId.do?id="+id, "", "width=300,height=200,top=300,left=700");
+			window.open("./memberCheckId.do?id="+id, "", "width=300,height=200,top=300,left=700");
 		});
 	});
 </script>
@@ -23,12 +35,17 @@
 	
 	<div class="row">
 		 <form action="./memberJoin.do" name="frm" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="idcheck" name="idcheck" value="f">
 		    <div class="form-group">
 		      <label for="id">ID:</label>
 		      <input type="text" class="form-control" id="id" placeholder="Enter ID" name="id">
 		      <input type="button" id="btn" value="중복확인"> 
 		    </div>
 		    <div class="form-group">
+		      <label for="pw">Passwrod:</label>
+		      <input type="password" class="form-control" id="pw" placeholder="Enter Password" name="pw">
+		    </div>
+		     <div class="form-group">
 		      <label for="pw">Passwrod:</label>
 		      <input type="password" class="form-control" id="pw" placeholder="Enter Password" name="pw">
 		    </div>
@@ -53,7 +70,8 @@
 		      <input type="file" class="form-control" id="file" name="f1">
 		    </div>
 		    <div class="form-group">
-		      <button type="submit" class="btn btn-default">Write</button>
+		      <input type="button" class="btn btn-default" id="join" value="join">
+		      
 		    </div>
 		  </form>
 		

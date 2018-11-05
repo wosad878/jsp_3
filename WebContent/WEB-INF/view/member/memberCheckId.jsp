@@ -11,6 +11,7 @@
 	$(function(){
 		$("#btn").click(function(){
 			/* opener.document.getElementById("id").value = '${param.id}'; */
+			opener.document.frm.idcheck.value = 's';
 			opener.document.frm.id.value = '${param.id}';
 			self.close();
 		});
