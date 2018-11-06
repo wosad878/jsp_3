@@ -10,6 +10,33 @@ import com.iu.page.RowNumber;
 import com.iu.util.DBConnector;
 
 public class MemoDAO {
+	
+	/*public static void main(String[] args) {
+		MemoDAO memoDAO = new MemoDAO();
+		for(int i=0; i<40; i++) {
+			MemoDTO memoDTO = new MemoDTO();
+			memoDTO.setContents("m"+i);
+			memoDTO.setWriter("W"+i);
+			try {
+				memoDAO.insert(memoDTO);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Finish");
+	}*/
+	public int getCount() throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql = "select count(num) from memo";
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		int result = rs.getInt(1);
+		DBConnector.disConnect(rs, st, con);
+		return result;
+	}
+	
 	public int delete(int num) throws Exception{
 		Connection con = DBConnector.getConnect();
 		String sql = "delete memo where num=?";

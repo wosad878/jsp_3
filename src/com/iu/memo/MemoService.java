@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.iu.action.ActionFoward;
 import com.iu.page.MakePager;
+import com.iu.page.Pager;
 import com.iu.page.RowNumber;
 
 public class MemoService {
@@ -16,19 +17,21 @@ public class MemoService {
 	public MemoService() {
 		memoDAO = new MemoDAO();
 	}
+	
+	
 	public ActionFoward delete(HttpServletRequest request, HttpServletResponse response) {
 		ActionFoward actionFoward = new ActionFoward();
-		String message = "Fail";
-		try {
-			int num = Integer.parseInt(request.getParameter("num"));
-			int	result = memoDAO.delete(num);
-			if(result > 0) {
-				message = "Success";
+		String [] nums = request.getParameterValues("num");
+		int num = 0;
+		for(String s : nums) {
+			try {
+				num = Integer.parseInt(s);
+				num = memoDAO.delete(num);
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		request.setAttribute("message" , message);
+		request.setAttribute("message" , num);
 		actionFoward.setCheck(true);
 		actionFoward.setPath("../WEB-INF/view/common/resultAjax.jsp");
 		return actionFoward;
@@ -71,13 +74,20 @@ public class MemoService {
 		RowNumber rowNumber = makePager.makeRow();
 		try {
 			List<MemoDTO> ar = memoDAO.selectList(rowNumber);
+			int totalCount = memoDAO.getCount();
+			Pager pager = makePager.makePage(totalCount);
 			request.setAttribute("list", ar);
+			request.setAttribute("pager", pager);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String path = request.getPathInfo();
+		/*path = path.substring(0, path.lastIndexOf("."));*/
+		/*path = path +".jsp";*/
+		path = path.replace(".do", ".jsp");
 		actionFoward.setCheck(true);
-		actionFoward.setPath("../WEB-INF/view/memo/memoList.jsp");
+		actionFoward.setPath("../WEB-INF/view/memo/"+path);
 		
 		return actionFoward;
 	}

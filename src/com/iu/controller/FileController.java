@@ -10,21 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.iu.action.ActionFoward;
-import com.iu.memo.MemoService;
+import com.iu.file.FileDAO;
+import com.iu.file.FileService;
 
 /**
- * Servlet implementation class MemoControllier
+ * Servlet implementation class FileController
  */
-@WebServlet("/MemoControllier")
-public class MemoController extends HttpServlet {
+@WebServlet("/FileController")
+public class FileController extends HttpServlet {
+	ActionFoward actionFoward;
+	FileService fileService;
 	private static final long serialVersionUID = 1L;
-    private MemoService memoService;
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemoController() {
+    public FileController() {
         super();
-        memoService = new MemoService();
+        fileService = new FileService();
         // TODO Auto-generated constructor stub
     }
 
@@ -32,20 +35,13 @@ public class MemoController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ActionFoward actionFoward = null;
+		// TODO Auto-generated method stub
 		String command = request.getPathInfo();
-		if(command.equals("/memoList.do")) {
-			actionFoward = memoService.selectList(request, response);
-		}else if(command.equals("/memoWrite.do")) {
-			actionFoward = memoService.insert(request, response);
-		}else if(command.equals("/memoDelete.do")) {
-			actionFoward = memoService.delete(request, response);
-		}else if(command.equals("/memoMore.do")) {
-			actionFoward = memoService.selectList(request, response);
+		if(command.equals("/fileDelete.do")) {
+			actionFoward = fileService.delete(request, response);
 		}
 		
-		
-		if(actionFoward.isCheck()){
+		if(actionFoward.isCheck()) {
 			RequestDispatcher view = request.getRequestDispatcher(actionFoward.getPath());
 			view.forward(request, response);
 		}else {

@@ -13,19 +13,32 @@
 			var writer = $("#writer").val();
 			var contents = $("#contents").val();
 			$.post("./memoWrite.do",{writer:writer, contents:contents},function(data){
-				alert(data);
-				location.reload();
+				$.get("./memoMore.do",function(data){
+					$("#table").html(data);
+				});
 			});
 		});
-		$("#del").click(function(){
-			$(".del").each(function(){
-				if($(this).prop("checked")){
-				var num = $(this).attr("id");
-				$.post("./memoDelete.do",{num:num},function(data){
-					alert(data);
-					location.reload();
+		
+		$("#del").click(function() {
+			var p = "?";
+			$(".del").each(function() {
+				if ($(this).prop("checked")) {
+					p=p+"num="+$(this).val()+"&";
+					/* $.get("./memoDelete.do?num=" + $(this).val()) */
+					}
 				});
-				}
+			$.get("./memoDelete.do"+p,function(){
+			$.get("./memoMore.do", function(data) {
+				$("#table").html(data.trim());
+				});
+			});
+		});
+		var curPage = 1;
+		$("#more").click(function() {
+			curPage++;
+			$.get("./memoMore.do?curPage=" + curPage, function(data) {
+				$("#table").append(data);
+
 			});
 		});
 	});
@@ -47,6 +60,7 @@
 	</div>
 	<div class="row">
 		<table class="table table-hover">
+		<tbody id="table">
 			<tr>
 				<td></td>
 				<td>NUM</td>
@@ -56,14 +70,16 @@
 			</tr>
 			<c:forEach items="${list}" var="m">
 			<tr>
-				<td><input type="checkbox" name="del" class="del" id="${m.num}"></td>
+				<td><input type="checkbox" name="del" class="del" value="${m.num}" id="${m.num}"></td>
 				<td>${m.num}</td>
 				<td>${m.contents}</td>
 				<td>${m.writer}</td>
 				<td>${m.reg_date}</td>
 			</tr>
 			</c:forEach>
+		</tbody>	
 		</table>
+		<button id="more">더보기</button>
 	</div>
 	<div class="row">
 		<button id="del">DEL</button>
